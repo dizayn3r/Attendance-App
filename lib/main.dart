@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
         useMaterial3: true,
-        textTheme: GoogleFonts.quicksandTextTheme(),
+        textTheme: GoogleFonts.nunitoTextTheme(),
         inputDecorationTheme: InputDecorationTheme(
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
