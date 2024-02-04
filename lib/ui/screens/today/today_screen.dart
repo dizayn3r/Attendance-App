@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:slide_to_act/slide_to_act.dart';
+
+import '../../../models/user.dart';
+import '../../../widgets/time_tile.dart';
 
 class TodayScreen extends StatefulWidget {
   const TodayScreen({super.key});
@@ -12,6 +16,26 @@ class TodayScreen extends StatefulWidget {
 class _TodayScreenState extends State<TodayScreen> {
   double screenWidth = 0;
   double screenHeight = 0;
+  DateTime? clockInTime;
+  DateTime? clockOutTime;
+
+  void clockIn() {
+    setState(() {
+      clockInTime = DateTime.now();
+    });
+  }
+
+  void clockOut() {
+    setState(() {
+      clockOutTime = DateTime.now();
+    });
+  }
+
+  @override
+  void initState() {
+    clockIn();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +51,7 @@ class _TodayScreenState extends State<TodayScreen> {
                 alignment: Alignment.centerLeft,
                 margin: const EdgeInsets.only(top: 24.0),
                 child: Text(
-                  "Welcome,",
+                  "Welcome, ",
                   style: TextStyle(
                     fontSize: screenWidth / 20,
                     fontWeight: FontWeight.normal,
@@ -37,7 +61,7 @@ class _TodayScreenState extends State<TodayScreen> {
               Container(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "User Name",
+                  User.username ?? "",
                   style: TextStyle(
                     fontSize: screenWidth / 18,
                     fontWeight: FontWeight.bold,
@@ -60,7 +84,7 @@ class _TodayScreenState extends State<TodayScreen> {
                 margin: const EdgeInsets.symmetric(vertical: 16.0),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(16.0),
+                  borderRadius: BorderRadius.circular(24.0),
                   boxShadow: const [
                     BoxShadow(
                       color: Colors.black26,
@@ -87,7 +111,9 @@ class _TodayScreenState extends State<TodayScreen> {
                             ),
                           ),
                           Text(
-                            "09:30",
+                            clockInTime != null
+                                ? DateFormat("hh:mm a").format(clockInTime!)
+                                : "--/--",
                             style: TextStyle(
                               fontSize: screenWidth / 18,
                               fontWeight: FontWeight.bold,
@@ -110,7 +136,9 @@ class _TodayScreenState extends State<TodayScreen> {
                             ),
                           ),
                           Text(
-                            "--/--",
+                            clockOutTime != null
+                                ? DateFormat("hh:mm a").format(clockOutTime!)
+                                : "--/--",
                             style: TextStyle(
                               fontSize: screenWidth / 18,
                               fontWeight: FontWeight.bold,
@@ -126,7 +154,7 @@ class _TodayScreenState extends State<TodayScreen> {
                 alignment: Alignment.centerLeft,
                 child: RichText(
                   text: TextSpan(
-                      text: "02, ",
+                      text: "${DateFormat("dd").format(DateTime.now())}, ",
                       style: GoogleFonts.nunito(
                         color: Theme.of(context).colorScheme.primary,
                         fontSize: screenWidth / 18,
@@ -134,7 +162,7 @@ class _TodayScreenState extends State<TodayScreen> {
                       ),
                       children: [
                         TextSpan(
-                          text: "Feb 2024",
+                          text: DateFormat("MMM yyyy").format(DateTime.now()),
                           style: GoogleFonts.nunito(
                             color: Colors.black,
                             fontSize: screenWidth / 18,
@@ -144,37 +172,34 @@ class _TodayScreenState extends State<TodayScreen> {
                       ]),
                 ),
               ),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "00:06:30 AM",
-                  style: TextStyle(
-                    color: Colors.black54,
-                    fontSize: screenWidth / 20,
-                    fontWeight: FontWeight.normal,
+              const TimeTile(),
+              const Spacer(),
+              Visibility(
+                visible: clockOutTime == null,
+                child: Container(
+                  margin: const EdgeInsets.only(top: 32),
+                  child: Builder(
+                    builder: (context) {
+                      final GlobalKey<SlideActionState> key = GlobalKey();
+                      return SlideAction(
+                        key: key,
+                        outerColor: Colors.white,
+                        innerColor: Theme.of(context).colorScheme.primary,
+                        animationDuration: const Duration(milliseconds: 500),
+                        text: "Slide to Check Out",
+                        textStyle: TextStyle(
+                          fontSize: screenWidth / 20,
+                          color: Colors.black54,
+                          fontWeight: FontWeight.normal,
+                        ),
+                        onSubmit: () async {
+                          // key.currentState!.reset();
+                          clockOut();
+                          return null;
+                        },
+                      );
+                    },
                   ),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 32),
-                child: Builder(
-                  builder: (context) {
-                    final GlobalKey<SlideActionState> key = GlobalKey();
-                    return SlideAction(
-                      key: key,
-                      outerColor: Colors.white,
-                      innerColor: Theme.of(context).colorScheme.primary,
-                      text: "Slide to Check Out",
-                      textStyle: TextStyle(
-                        fontSize: screenWidth / 20,
-                        color: Colors.black54,
-                        fontWeight: FontWeight.normal,
-                      ),
-                      onSubmit: () {
-                        key.currentState!.reset();
-                      },
-                    );
-                  },
                 ),
               ),
             ],

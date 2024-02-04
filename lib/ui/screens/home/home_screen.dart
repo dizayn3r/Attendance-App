@@ -1,6 +1,6 @@
-import 'package:attendance_app/calender_screen.dart';
-import 'package:attendance_app/profile_screen.dart';
-import 'package:attendance_app/today_screen.dart';
+import 'package:attendance_app/ui/screens/calender/calender_screen.dart';
+import 'package:attendance_app/ui/screens/profile/profile_screen.dart';
+import 'package:attendance_app/ui/screens/today/today_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
     FontAwesomeIcons.user
   ];
 
-  int currentIndex = 0;
+  int currentIndex = 1;
 
   @override
   Widget build(BuildContext context) {

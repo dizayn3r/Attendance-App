@@ -1,5 +1,7 @@
-import 'package:attendance_app/home_screen.dart';
 import 'package:flutter/material.dart';
+
+import '../../../useCases/navigation/navigate.dart';
+import 'moduleWidgets/login_form.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -19,28 +21,28 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextFormField(
-                decoration: const InputDecoration(hintText: "Email"),
+              Expanded(
+                child: LoginForm(),
               ),
-              const SizedBox(height: 8.0),
-              TextFormField(
-                decoration: const InputDecoration(hintText: "Password"),
-              ),
-              const SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) => const HomeScreen(),
+              Divider(),
+              Container(
+                height: kToolbarHeight,
+                alignment: Alignment.center,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Don't have an account? "),
+                    TextButton(
+                      onPressed: () => Navigate.signUp(context),
+                      child: Text("Sign Up"),
                     ),
-                  );
-                },
-                child: const Text("Login"),
-              ),
+                  ],
+                ),
+              )
             ],
           ),
         ),
